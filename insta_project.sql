@@ -24,3 +24,26 @@ LEFT JOIN photos
 ON users.id = photos.user_id
 where photos.id IS NULL;
 
+
+
+#Our Investors want to know...
+#How many times does the average user post?
+#total number of photos/total number of users
+
+SELECT ROUND((select count(*) from photos)/(select count(*) from users),2);
+
+#user ranking by postings higher to lower
+
+SELECT users.username,COUNT(photos.image_url)
+FROM users
+JOIN photos ON users.id = photos.user_id
+GROUP BY users.id
+ORDER BY 2 DESC;
+
+#Total Posts by users (longer version of SELECT COUNT(*)FROM photos) 
+
+SELECT SUM(user_posts.total_posts_per_user)
+FROM (SELECT users.username,COUNT(photos.image_url)AS  total_posts_per_user
+FROM users
+JOIN photos ON users.id = photos.user_id
+GROUP BY users.id) AS user_posts;
