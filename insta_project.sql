@@ -1,3 +1,24 @@
+#Write a query to get the total number of comments for each photo.
+
+SELECT photo_id, COUNT(*) AS comment_count
+FROM comments
+GROUP BY photo_id;
+
+#Write a query to get the username of the user who posted the photo with the most likes.
+
+SELECT u.username
+FROM users u
+JOIN (
+    SELECT p.user_id, p.id
+    FROM photos p
+    JOIN likes l ON p.id = l.photo_id
+    GROUP BY p.id
+    ORDER BY COUNT(*) DESC
+    LIMIT 1
+) t ON u.id = t.user_id;
+
+
+
 #What day of the week do most users register on?
 #We need to figure out when to schedule an ad campgain*
 
@@ -24,6 +45,14 @@ LEFT JOIN photos
 ON users.id = photos.user_id
 where photos.id IS NULL;
 
+#Write a query to get the top 5 most tagged photos, along with the number of tags for each photo.
+
+SELECT p.id, COUNT(*) AS tag_count
+FROM photos p
+JOIN photo_tags pt ON p.id = pt.photo_id
+GROUP BY p.id
+ORDER BY tag_count DESC
+LIMIT 5;
 
 
 #Our Investors want to know...
